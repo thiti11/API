@@ -22,12 +22,36 @@ class home_page extends connectServer
 
         return $res;
     }
-    function Get_itemorder() 
+
+    function Get_itemm() 
     {
         
         $conn = $this->Myconn();
         $res = [];
-        $sql = "SELECT * FROM itemorder";
+        $sql = " SELECT  `List`FROM `itemm`  ";
+        $result = $conn->prepare($sql);
+        $result->execute(); 
+        while ($obj = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($res, $obj);
+        }
+
+        return $res;
+    }
+
+    function Get_itemorder() 
+    {
+        
+        $conn = $this->Myconn();
+        $postdata = file_get_contents("php://input");
+        $Employee_ID='';
+        if(isset($postdata) && !empty($postdata))
+        {
+            $request = json_decode($postdata);
+            $Employee_ID = trim($request->Employee_ID);
+           
+        }
+        $res = [];
+        $sql = "SELECT * FROM itemorder WHERE `Employee_ID`='$Employee_ID'";
         $result = $conn->prepare($sql);
         $result->execute(); 
         while ($obj = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -140,32 +164,35 @@ class home_page extends connectServer
      }
      function Get_Order()
      {
-        $con = mysqli_connect("localhost","root","","welfare_req");  
+        $conn = mysqli_connect("localhost","root","","welfare_req");  
         $postdata = file_get_contents("php://input");
         if(isset($postdata) && !empty($postdata))
         {
             $request = json_decode($postdata);
         //$con= $this->Myconn();
         $res = [];
-        $list = mysqli_real_escape_string($con,trim($request->list ) ); 
-        $Quantity = mysqli_real_escape_string($con,trim($request->Quantity ) );
-        $Remark = mysqli_real_escape_string($con,trim($request->Remark ) );
+        $list = mysqli_real_escape_string($conn,trim($request->list ) ); 
+        $Quantity = mysqli_real_escape_string($conn,trim($request->Quantity ) );
+        $Remark = mysqli_real_escape_string($conn,trim($request->Remark ) );
+        $Employee_ID= mysqli_real_escape_string($conn,trim($request->Employee_ID) );
 
         $sql = "INSERT INTO itemorder (
                     list, 
                     Quantity, 
-                    Remark
+                    Remark,
+                    Employee_ID
+
                     ) VALUES (
                     '$list',
                     '$Quantity',
-                    '$Remark'
+                    '$Remark',
+                    '$Employee_ID'
                 )";
 
-                if($con->query($sql) === TRUE){  
-                    array_push($res,$con);
+                if($conn->query($sql) === TRUE){  
+                    array_push($res,$conn);
                     return("successfully");         
-               //     $res = $con;
-                //return( $res);
+          
                 }else{
                 return("failed");
                 }
@@ -176,19 +203,54 @@ class home_page extends connectServer
 
     function Get_Deleteorder(){
        $conn = mysqli_connect("localhost","root","","welfare_req");  
-       
+       $conn = $this->Myconn();
+       $postdata = file_get_contents("php://input");
+       $No_ID='';
+       if(isset($postdata) && !empty($postdata))
+       {
+           $request = json_decode($postdata);
+           $No_ID = trim($request->data);
+       }
+      
 
-       // if(isset($_POST['No_ID'])){
-        $conn = $this->Myconn();
-       // $No_ID=$_POST['No_ID'];
-        $No_ID='106';
+       // $No_ID='112';
         $sql = "DELETE FROM `itemorder` WHERE `itemorder`.`No_ID`='$No_ID' ";
         $result = $conn->prepare($sql);
         $result->execute(); 
         return('successfully');
-       //  }
-}
+
+    }
       
+        function Get_Updateorder() 
+        {
+            $con = mysqli_connect("localhost","root","","welfare_req");  
+        
+         
+            $postdata = file_get_contents("php://input");
+            $No_ID='';
+            if(isset($postdata) && !empty($postdata))
+            {
+                $request = json_decode($postdata);
+                $No_ID = trim($request->data);
+                $list = mysqli_real_escape_string($con,trim($request->list ) ); 
+                $Hat = mysqli_real_escape_string($con,trim($request->Hat ) );
+                $Quantity = mysqli_real_escape_string($con,trim($request->Quantity ) );
+                $Remark = mysqli_real_escape_string($con,trim($request->Remark ) );
+            }
+           // $conn = $this->Myconn();
+            $res = [];
+            $sql =" UPDATE `itemorder` SET `List`='$list',`Hat`='$Hat',`Quantity`='$Quantity',`Remark`='$Remark' WHERE No_ID =' $No_ID'  ";
+            if($con->query($sql) === TRUE){  
+                array_push($res,$con);
+                return("successfully");         
+
+            }else{
+            return("failed");
+            }
+
+
+            
+        }
         
 }
             

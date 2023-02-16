@@ -32,7 +32,10 @@ switch ($request['mod']) {
       break;  
     case "Get_Deleteorder":
       $data = $home_page->Get_Deleteorder();
-      break;    
+      break;  
+    case "Get_itemm":
+      $data = $home_page->Get_itemm();
+      break;       
       /// Last Case///
       $data["message"] = "ไม่พบ case";
       break;
