@@ -37,6 +37,22 @@ class home_page extends connectServer
 
         return $res;
     }
+    
+    function Get_orderadmin() 
+    {
+        
+        $conn = $this->Myconn();
+        $res = [];
+        $sql = "SELECT * FROM `itemorder` ";
+        $result = $conn->prepare($sql);
+        $result->execute(); 
+        while ($obj = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($res, $obj);
+        }
+
+        return $res;
+    }
+
 
     function Get_itemorder() 
     {
@@ -58,8 +74,10 @@ class home_page extends connectServer
             array_push($res, $obj);
         }
 
-        return $res;
+        return ($res);
     }
+
+ 
     
      //Get model master data to cb_model
      function Get_login() 
@@ -85,19 +103,19 @@ class home_page extends connectServer
             {
               //  $rows = array();
             while($row = mysqli_fetch_assoc($result))
-            if ($row>0) {
+           {
 
       
                 $res=$row;
                 return($res);
         
             }
-           
+            
+         
          
             }
-            else
-            {
-            http_response_code(404);
+            else{
+                http_response_code(404);
             }
             
 
@@ -174,19 +192,25 @@ class home_page extends connectServer
         $list = mysqli_real_escape_string($conn,trim($request->list ) ); 
         $Quantity = mysqli_real_escape_string($conn,trim($request->Quantity ) );
         $Remark = mysqli_real_escape_string($conn,trim($request->Remark ) );
+        $Request_By = mysqli_real_escape_string($conn,trim($request->Request_By ) );
         $Employee_ID= mysqli_real_escape_string($conn,trim($request->Employee_ID) );
+        $Firstname= mysqli_real_escape_string($conn,trim($request->Firstname) );
 
         $sql = "INSERT INTO itemorder (
                     list, 
                     Quantity, 
                     Remark,
-                    Employee_ID
+                    Employee_ID,
+                    Firstname,
+                    Request_By
 
                     ) VALUES (
                     '$list',
                     '$Quantity',
                     '$Remark',
-                    '$Employee_ID'
+                    '$Employee_ID',
+                    '$Firstname',
+                    '$Request_By'
                 )";
 
                 if($conn->query($sql) === TRUE){  
@@ -233,13 +257,13 @@ class home_page extends connectServer
                 $request = json_decode($postdata);
                 $No_ID = trim($request->data);
                 $list = mysqli_real_escape_string($con,trim($request->list ) ); 
-                $Hat = mysqli_real_escape_string($con,trim($request->Hat ) );
                 $Quantity = mysqli_real_escape_string($con,trim($request->Quantity ) );
                 $Remark = mysqli_real_escape_string($con,trim($request->Remark ) );
+
             }
            // $conn = $this->Myconn();
             $res = [];
-            $sql =" UPDATE `itemorder` SET `List`='$list',`Hat`='$Hat',`Quantity`='$Quantity',`Remark`='$Remark' WHERE No_ID =' $No_ID'  ";
+            $sql =" UPDATE `itemorder` SET `List`='$list',`Quantity`='$Quantity',`Remark`='$Remark' WHERE No_ID =' $No_ID'  ";
             if($con->query($sql) === TRUE){  
                 array_push($res,$con);
                 return("successfully");         
@@ -251,7 +275,8 @@ class home_page extends connectServer
 
             
         }
-        
+   
+    
 }
             
         
