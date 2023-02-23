@@ -38,7 +38,10 @@ switch ($request['mod']) {
       break;     
     case "Get_orderadmin":
       $data = $home_page->Get_orderadmin();
-      break;           
+      break;    
+    case "Get_thiti":
+      $data = $home_page->Get_thiti();
+      break;        
       /// Last Case///
       $data["message"] = "ไม่พบ case";
       break;

@@ -64,6 +64,7 @@ class home_page extends connectServer
         {
             $request = json_decode($postdata);
             $Employee_ID = trim($request->Employee_ID);
+            
            
         }
         $res = [];
@@ -76,6 +77,35 @@ class home_page extends connectServer
 
         return ($res);
     }
+
+    function Get_thiti() 
+    {
+        
+        $conn = $this->Myconn();
+        $postdata = file_get_contents("php://input");
+   
+        $No_ID='';
+        if(isset($postdata) && !empty($postdata))
+        {
+            $request = json_decode($postdata);
+          
+            $No_ID = trim($request->No_ID);
+            
+           
+        }
+        $res = [];
+        $sql = "SELECT * FROM itemorder WHERE    No_ID='$No_ID'";
+        $result = $conn->prepare($sql);
+       $result->execute(); 
+      
+        while ($obj = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($res, $obj);
+        }
+
+        return ($res);
+    }
+   
+  
 
  
     
