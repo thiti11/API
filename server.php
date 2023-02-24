@@ -39,9 +39,15 @@ switch ($request['mod']) {
     case "Get_orderadmin":
       $data = $home_page->Get_orderadmin();
       break;    
-    case "Get_thiti":
-      $data = $home_page->Get_thiti();
-      break;        
+    case "Get_Orderid":
+      $data = $home_page->Get_Orderid();
+      break;  
+    case "Get_approval":
+      $data = $home_page->Get_approval();
+      break;
+    case "Get_By":
+      $data = $home_page->Get_By();
+      break;            
       /// Last Case///
       $data["message"] = "ไม่พบ case";
       break;

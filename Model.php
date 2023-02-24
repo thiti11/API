@@ -53,6 +53,32 @@ class home_page extends connectServer
         return $res;
     }
 
+    function Get_approval() 
+    {
+        
+        $conn = $this->Myconn();
+        $postdata = file_get_contents("php://input");
+   
+        $No_ID='';
+        if(isset($postdata) && !empty($postdata))
+        {
+            $request = json_decode($postdata);
+          
+            $No_ID = trim($request->No_ID);
+            
+           
+        }
+        $res = [];
+        $sql = "SELECT * FROM `itemorder` WHERE    No_ID='$No_ID'";
+        $result = $conn->prepare($sql);
+        $result->execute(); 
+        while ($obj = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($res, $obj);
+        }
+
+        return $res;
+    }
+
 
     function Get_itemorder() 
     {
@@ -78,7 +104,7 @@ class home_page extends connectServer
         return ($res);
     }
 
-    function Get_thiti() 
+    function Get_Orderid() 
     {
         
         $conn = $this->Myconn();
@@ -294,6 +320,37 @@ class home_page extends connectServer
            // $conn = $this->Myconn();
             $res = [];
             $sql =" UPDATE `itemorder` SET `List`='$list',`Quantity`='$Quantity',`Remark`='$Remark' WHERE No_ID =' $No_ID'  ";
+            if($con->query($sql) === TRUE){  
+                array_push($res,$con);
+                return("successfully");         
+
+            }else{
+            return("failed");
+            }
+
+
+            
+        }
+
+        function Get_By() 
+        {
+            $con = mysqli_connect("localhost","root","","welfare_req");  
+        
+         
+            $postdata = file_get_contents("php://input");
+            $No_ID='';
+            if(isset($postdata) && !empty($postdata))
+            {
+                $request = json_decode($postdata);
+                $No_ID = trim($request->data);
+               
+                $Approved_By = mysqli_real_escape_string($con,trim($request->Approved_By ) );
+                $Issued_By = mysqli_real_escape_string($con,trim($request->Issued_By ) );
+
+            }
+           // $conn = $this->Myconn();
+            $res = [];
+            $sql =" UPDATE `itemorder` SET `Approved_By`='$Approved_By',`Issued_By`='$Issued_By' WHERE No_ID =' $No_ID'  ";
             if($con->query($sql) === TRUE){  
                 array_push($res,$con);
                 return("successfully");         
