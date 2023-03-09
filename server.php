@@ -47,7 +47,10 @@ switch ($request['mod']) {
       break;
     case "Get_By":
       $data = $home_page->Get_By();
-      break;            
+      break; 
+    case "Get_issued":
+      $data = $home_page->Get_issued();
+      break;                 
       /// Last Case///
       $data["message"] = "ไม่พบ case";
       break;

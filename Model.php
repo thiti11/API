@@ -345,12 +345,42 @@ class home_page extends connectServer
                 $No_ID = trim($request->data);
                
                 $Approved_By = mysqli_real_escape_string($con,trim($request->Approved_By ) );
+             
+
+            }
+           // $conn = $this->Myconn();
+            $res = [];
+            $sql =" UPDATE `itemorder` SET `Approved_By`='$Approved_By' WHERE No_ID =' $No_ID'  ";
+            if($con->query($sql) === TRUE){  
+                array_push($res,$con);
+                return("successfully");         
+
+            }else{
+            return("failed");
+            }
+
+
+            
+        }
+        function Get_issued() 
+        {
+            $con = mysqli_connect("localhost","root","","welfare_req");  
+        
+         
+            $postdata = file_get_contents("php://input");
+            $No_ID='';
+            if(isset($postdata) && !empty($postdata))
+            {
+                $request = json_decode($postdata);
+                $No_ID = trim($request->data);
+               
+             
                 $Issued_By = mysqli_real_escape_string($con,trim($request->Issued_By ) );
 
             }
            // $conn = $this->Myconn();
             $res = [];
-            $sql =" UPDATE `itemorder` SET `Approved_By`='$Approved_By',`Issued_By`='$Issued_By' WHERE No_ID =' $No_ID'  ";
+            $sql =" UPDATE `itemorder` SET `Issued_By`='$Issued_By' WHERE No_ID =' $No_ID'  ";
             if($con->query($sql) === TRUE){  
                 array_push($res,$con);
                 return("successfully");         
