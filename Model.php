@@ -249,6 +249,7 @@ class home_page extends connectServer
         $Quantity = mysqli_real_escape_string($conn,trim($request->Quantity ) );
         $Remark = mysqli_real_escape_string($conn,trim($request->Remark ) );
         $Request_By = mysqli_real_escape_string($conn,trim($request->Request_By ) );
+        $Status = mysqli_real_escape_string($conn,trim($request->Status ) );
         $Employee_ID= mysqli_real_escape_string($conn,trim($request->Employee_ID) );
         $Firstname= mysqli_real_escape_string($conn,trim($request->Firstname) );
 
@@ -258,7 +259,8 @@ class home_page extends connectServer
                     Remark,
                     Employee_ID,
                     Firstname,
-                    Request_By
+                    Request_By,
+                    Status
 
                     ) VALUES (
                     '$list',
@@ -266,7 +268,8 @@ class home_page extends connectServer
                     '$Remark',
                     '$Employee_ID',
                     '$Firstname',
-                    '$Request_By'
+                    '$Request_By',
+                    '$Status'
                 )";
 
                 if($conn->query($sql) === TRUE){  
@@ -345,12 +348,13 @@ class home_page extends connectServer
                 $No_ID = trim($request->data);
                
                 $Approved_By = mysqli_real_escape_string($con,trim($request->Approved_By ) );
+                $Status = mysqli_real_escape_string($con,trim($request->Status ) );
              
 
             }
            // $conn = $this->Myconn();
             $res = [];
-            $sql =" UPDATE `itemorder` SET `Approved_By`='$Approved_By' WHERE No_ID =' $No_ID'  ";
+            $sql =" UPDATE `itemorder` SET `Approved_By`='$Approved_By',`Status`='$Status' WHERE No_ID =' $No_ID'  ";
             if($con->query($sql) === TRUE){  
                 array_push($res,$con);
                 return("successfully");         
@@ -376,11 +380,11 @@ class home_page extends connectServer
                
              
                 $Issued_By = mysqli_real_escape_string($con,trim($request->Issued_By ) );
-
+                $Status = mysqli_real_escape_string($con,trim($request->Status ) );
             }
            // $conn = $this->Myconn();
             $res = [];
-            $sql =" UPDATE `itemorder` SET `Issued_By`='$Issued_By' WHERE No_ID =' $No_ID'  ";
+            $sql =" UPDATE `itemorder` SET `Issued_By`='$Issued_By' ,`Status`='$Status'WHERE No_ID =' $No_ID'  ";
             if($con->query($sql) === TRUE){  
                 array_push($res,$con);
                 return("successfully");         
@@ -392,6 +396,40 @@ class home_page extends connectServer
 
             
         }
+
+        function Get_Cancel() 
+        {
+            $con = mysqli_connect("localhost","root","","welfare_req");  
+        
+         
+            $postdata = file_get_contents("php://input");
+            $No_ID='';
+            if(isset($postdata) && !empty($postdata))
+            {
+                $request = json_decode($postdata);
+                $No_ID = trim($request->data);
+               
+                $RemarkCancel = mysqli_real_escape_string($con,trim($request->Cancel ) );
+                $Status = mysqli_real_escape_string($con,trim($request->Status ) );
+             
+
+            }
+           // $conn = $this->Myconn();
+            $res = [];
+            $sql =" UPDATE `itemorder` SET `RemarkCancel`='$RemarkCancel',`Status`='$Status' WHERE No_ID =' $No_ID'  ";
+            if($con->query($sql) === TRUE){  
+                array_push($res,$con);
+                return("successfully");         
+
+            }else{
+            return("failed");
+            }
+
+
+            
+        }
+
+       
    
     
 }
