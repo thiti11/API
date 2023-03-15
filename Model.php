@@ -248,6 +248,7 @@ class home_page extends connectServer
         $list = mysqli_real_escape_string($conn,trim($request->list ) ); 
         $Quantity = mysqli_real_escape_string($conn,trim($request->Quantity ) );
         $Remark = mysqli_real_escape_string($conn,trim($request->Remark ) );
+        $Date = mysqli_real_escape_string($conn,trim($request->Date) );
         $Request_By = mysqli_real_escape_string($conn,trim($request->Request_By ) );
         $Status = mysqli_real_escape_string($conn,trim($request->Status ) );
         $Employee_ID= mysqli_real_escape_string($conn,trim($request->Employee_ID) );
@@ -260,7 +261,8 @@ class home_page extends connectServer
                     Employee_ID,
                     Firstname,
                     Request_By,
-                    Status
+                    Status,
+                    Date
 
                     ) VALUES (
                     '$list',
@@ -269,7 +271,8 @@ class home_page extends connectServer
                     '$Employee_ID',
                     '$Firstname',
                     '$Request_By',
-                    '$Status'
+                    '$Status',
+                    '$Date'
                 )";
 
                 if($conn->query($sql) === TRUE){  
@@ -366,6 +369,8 @@ class home_page extends connectServer
 
             
         }
+
+
         function Get_issued() 
         {
             $con = mysqli_connect("localhost","root","","welfare_req");  
@@ -428,6 +433,38 @@ class home_page extends connectServer
 
             
         }
+
+        function Get_Cancel2() 
+        {
+            $con = mysqli_connect("localhost","root","","welfare_req");  
+        
+         
+            $postdata = file_get_contents("php://input");
+            $No_ID='';
+            if(isset($postdata) && !empty($postdata))
+            {
+                $request = json_decode($postdata);
+                $No_ID = trim($request->data);
+            
+                $Status = mysqli_real_escape_string($con,trim($request->Status ) );
+             
+
+            }
+           // $conn = $this->Myconn();
+            $res = [];
+            $sql =" UPDATE `itemorder` SET `Status`='$Status' WHERE No_ID =' $No_ID'  ";
+            if($con->query($sql) === TRUE){  
+                array_push($res,$con);
+                return("successfully");         
+
+            }else{
+            return("failed");
+            }
+
+
+            
+        }
+
 
        
    

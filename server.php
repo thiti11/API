@@ -53,7 +53,10 @@ switch ($request['mod']) {
       break;     
     case "Get_Cancel":
       $data = $home_page->Get_Cancel();
-      break;              
+      break;     
+    case "Get_Cancel2":
+      $data = $home_page->Get_Cancel2();
+      break;         
       /// Last Case///
       $data["message"] = "ไม่พบ case";
       break;
